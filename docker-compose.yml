@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+
+  # Mysql database
+  mysql:
+      image: mysql:5.7
+      environment:
+        MYSQL_ROOT_PASSWORD: "senha"
+        MYSQL_DATABASE: "teste"
+      ports:
+        - "3306:3306"
+      volumes:
+        - ./config/database:/docker-entrypoint-initdb.d
+      command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      networks:
+        - percona-net
+  
+  # Cliente para consulta no mysql
+  adminer:
+    image: adminer:4.8.1-standalone
+    ports:
+      - 8080:8080
+    networks:
+      - percona-net
+
+networks: 
+  percona-net:
+      driver: bridge
